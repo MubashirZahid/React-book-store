@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import useBookHook from "../../hooks/useBookHook";
-import Button from "../Button/Button";
 import "./UpdateBook.css";
 
 const UpdateBook = () => {
@@ -29,8 +28,7 @@ const UpdateBook = () => {
         discounted_price: bookDiscountedPrice,
         release_date: bookReleaseDate,
       };
-      console.log(updatedData);
-      // updateBook(bookId, updatedData);
+      updateBook(bookId, updatedData);
       setBookId("");
     }
   };
@@ -50,7 +48,6 @@ const UpdateBook = () => {
         type="text"
         placeholder="New title"
         value={bookTitle}
-        required
         onChange={(e) => setBookTitle(e.target.value)}
       />
       <p>Enter new price:</p>
@@ -108,13 +105,7 @@ const UpdateBook = () => {
         value={bookReleaseDate}
         onChange={(e) => setBookReleaseDate(e.target.value)}
       />
-      <div className="form-group">
-        <Button
-          text="Update"
-          type="submit"
-          style={{ backgroundColor: "#007bff", color: "white" }}
-        />
-      </div>
+      <button onClick={handleUpdate}>Update</button>
     </div>
   );
 };
