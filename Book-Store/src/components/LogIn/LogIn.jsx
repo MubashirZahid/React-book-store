@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../utils/userSlice";
 import { useForm, Controller } from "react-hook-form";
 import axiosInstance from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   container: {
@@ -32,8 +35,10 @@ const styles = {
 };
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
-
+  const [userData, setUserData] = useState([]);
   const onSubmit = (data) => {
     //reqres registered sample user
     const loginPayload = {
@@ -46,16 +51,35 @@ const LoginForm = () => {
       .then((response) => {
         // get token from response
         console.log(response);
+        console.log(loginPayload);
+        setUserData(response.data.data);
         const token = response.data.data.token;
 
         // set JWT token to local storage
         localStorage.setItem("token", token);
 
-        // redirect user to home page
-        // navigate("/");
+        // Dispatch the loginUser action with the user data.
+        dispatch(
+          loginUser({
+            email: data.email,
+            password: data.password /* other user data */,
+          })
+        );
+
+        // Redirect the user to the home page
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    dispatch(
+      loginUser({
+        email: userData.email,
+        password: userData.password /* other user data */,
+      })
+    );
+  }, [userData]);
 
   return (
     <div style={styles.container}>

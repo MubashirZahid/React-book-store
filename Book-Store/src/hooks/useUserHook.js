@@ -6,7 +6,7 @@ const useUserHook = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/user/api/getAllUsers") // Replace with the endpoint to fetch user data
+      .get("/user/api/getAllUsers")
       .then((response) => {
         setUserData(response.data);
       })
@@ -28,7 +28,7 @@ const useUserHook = () => {
 
   const deleteUser = (userId) => {
     axiosInstance
-      .delete(`/users/api/delete/${userId}`) // Replace with the endpoint for deleting users
+      .delete(`/user/api/deleteUser/${userId}`) // Replace with the endpoint for deleting users
       .then((response) => {
         console.log("Successfully deleted user:", response.data);
       })

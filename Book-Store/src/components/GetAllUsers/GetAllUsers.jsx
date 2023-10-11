@@ -1,16 +1,11 @@
-import React, { useEffect } from "react";
-import useUserHook from "../../hooks/useUserHook"; // Import the user data fetching hook
+import React from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import useUserHook from "../../hooks/useUserHook";
 import Button from "../Button/Button";
 import "./GetAllUsers.css";
 
 const GetAllUsers = () => {
-  const { userData } = useUserHook(); // Replace with the appropriate user data hook
-
-  useEffect(() => {
-    if (userData) {
-      console.log("From GetAllUsers.jsx ", userData.data);
-    }
-  }, [userData]);
+  const { userData } = useUserHook();
 
   return (
     <div>
@@ -35,16 +30,23 @@ const GetAllUsers = () => {
                 <td>{user.balance}</td>
                 <td>{user.phone}</td>
                 <td>
-                  <Button
-                    text="Edit"
-                    style={{ backgroundColor: "#007bff", color: "white" }}
-                  />
+                  <Link to={`/update-user/${user._id}`}>
+                    {/* Pass the user ID as a parameter in the URL */}
+                    <Button
+                      text="Edit"
+                      style={{ backgroundColor: "#007bff", color: "white" }}
+                    />
+                  </Link>
                 </td>
                 <td>
-                  <Button
-                    text="Delete"
-                    style={{ backgroundColor: "red", color: "white" }}
-                  />
+                  <Link to={`/delete-user/${user._id}`}>
+                    {" "}
+                    {/* Link to user delete page */}
+                    <Button
+                      text="Delete"
+                      style={{ backgroundColor: "red", color: "white" }}
+                    />
+                  </Link>
                 </td>
               </tr>
             ))}
