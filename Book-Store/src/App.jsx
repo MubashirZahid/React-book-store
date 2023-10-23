@@ -12,10 +12,16 @@ import GetAllUsers from "./components/GetAllUsers/GetAllUsers";
 
 import DeleteUser from "./components/DeleteUser/DeleteUser";
 import UpdateUser from "./components/UpdateUser/UpdateUser";
-import SearchBooks from "./components/SearchBooks/SearchBooks";
+// import SearchBooks from "./components/SearchBooks/SearchBooks";
 import CartTotal from "./components/Cart/CartTotal";
 import { Provider } from "react-redux"; // Import Provider
 import store from "./utils/store"; // Import the Redux store
+import Authenticate from "./components/Authenticate/Authenticate";
+import SearchBooks from "./components/SearchBooks/SearchBooks";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ForgotPassword from "./components/ResetPassword/ForgotPassword";
+import AddFile from "./components/AddFile/AddFile";
+import GetFile from "./components/GetFile/GetFile";
 
 function App() {
   return (
@@ -25,15 +31,26 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<GetAllBooks />} />
+            <Route path="/search" element={<SearchBooks />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/create-book" element={<CreateBook />} />
-            <Route path="/update-book" element={<UpdateBook />} />
-            <Route path="/delete-book" element={<DeleteBook />} />
+            <Route path="/forgot-password/" element={<ForgotPassword />} />
+            <Route
+              path="/reset-password/:token/:userId"
+              element={<ResetPassword />}
+            />
 
-            <Route path="/admin" element={<GetAllUsers />} />
-            <Route path="/update-user/:id" element={<UpdateUser />} />
-            <Route path="/delete-user/:id" element={<DeleteUser />} />
+            <Route path="/file-upload" element={<AddFile />} />
+            <Route path="/file-get" element={<GetFile />} />
+
+            <Route element={<Authenticate />}>
+              <Route path="/create-book" element={<CreateBook />} />
+              <Route path="/update-book" element={<UpdateBook />} />
+              <Route path="/delete-book" element={<DeleteBook />} />
+              <Route path="/admin" element={<GetAllUsers />} />
+              <Route path="/update-user/:id" element={<UpdateUser />} />
+              <Route path="/delete-user/:id" element={<DeleteUser />} />
+            </Route>
 
             <Route path="/add-to-cart" element={<CartTotal />} />
 

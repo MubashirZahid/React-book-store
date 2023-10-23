@@ -14,14 +14,27 @@ const CreateBook = () => {
 
   const onSubmit = (data) => {
     // Handle book creation with the form data
-    createBook(data);
-    console.log(data);
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("price", data.price);
+    formData.append("author", data.author);
+    formData.append("stock", data.stock);
+    formData.append("description", data.description);
+    formData.append("discount_start_date", data.discount_start_date);
+    formData.append("discount_end_date", data.discount_end_date);
+    formData.append("discounted_price", data.discounted_price);
+    formData.append("release_date", data.release_date);
+    formData.append("image", data.image);
+
+    createBook(formData);
+    console.log(formData);
   };
 
   return (
     <div className="create-book-container">
       <h1>Create Book</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <div className="form-group">
           <h4>Title</h4>
           <Controller
@@ -203,6 +216,28 @@ const CreateBook = () => {
           />
           {errors.release_date && (
             <p className="error-message">{errors.release_date.message}</p>
+          )}
+        </div>
+        {/* Image */}
+        <div className="form-group">
+          <h4>Image</h4>
+          <Controller
+            name="image"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <input
+                type="file"
+                placeholder="Enter book's image url"
+                className="auth-input-half"
+                // value={value.fileName}
+                onChange={(e) => onChange(e.target.files[0])}
+                // {...field}
+              />
+            )}
+          />
+
+          {errors.author && (
+            <p className="error-message">{errors.author.message}</p>
           )}
         </div>
         <div className="form-group">

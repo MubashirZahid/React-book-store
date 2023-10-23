@@ -1,13 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
 import axios from "axios";
+import { decodeToken } from "react-jwt";
 
 const Authenticate = () => {
-  const check = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const check = decodeToken(token);
   console.log("Authenticating", check);
 
-  return check ? (
+  return check.role == 1 ? (
     <div>
-      <Outlet />{" "}
+      {/* <Navigate to="/admin" /> */}
+      <Outlet />
     </div>
   ) : (
     <Navigate to="/login" />

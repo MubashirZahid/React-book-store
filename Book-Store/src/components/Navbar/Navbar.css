@@ -19,7 +19,10 @@
   
   /* Logo */
   .logo img {
-    max-height: 50px; /* Adjust the height as needed */
+    max-height: 70px;
+    width: 80px;
+    border-radius: 50%; 
+    margin-top: 15px;
   }
 
   .navbar-middle{

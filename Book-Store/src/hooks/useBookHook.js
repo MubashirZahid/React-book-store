@@ -22,6 +22,7 @@ const useBookHook = () => {
 
   const createBook = (formData) => {
     // setLoading(true);
+    console.log("data: ", formData);
 
     axiosInstance
       .post("/books/api/create", formData)

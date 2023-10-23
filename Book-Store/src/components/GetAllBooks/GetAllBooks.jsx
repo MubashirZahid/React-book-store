@@ -5,16 +5,37 @@ import CartTotal from "../Cart/CartTotal";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../reducers/cart";
 import { Link } from "react-router-dom";
+import myImage from "../../assets/Book_pic.jpg";
+import axiosInstance from "../../utils/axiosInstance";
+import { loginUser } from "../../utils/userSlice";
+import { decodeToken } from "react-jwt";
+import Banner from "../Banner/Banner";
+import { useNavigate } from "react-router-dom";
 
 const GetAllBooks = () => {
   const { bookData } = useBookHook();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
+
+  const myToken = localStorage.getItem("token");
+  const userInfo = decodeToken(myToken);
 
   const [sortedBooks, setSortedBooks] = useState([]); // State for sorted books
 
   const handleAddToCart = (book) => {
-    dispatch(addToCart(book));
+    if (userInfo.role !== 2) {
+      navigate("/login");
+    } else {
+      axiosInstance.post(`/cart/api/addToCart`, {
+        userId: userInfo.id,
+        bookId: book._id,
+        quantity: 1,
+      });
+      console.log(book._id);
+      console.log(userInfo.id);
+      dispatch(addToCart(book));
+    }
   };
 
   // Function to sort books by price
@@ -26,17 +47,26 @@ const GetAllBooks = () => {
 
   useEffect(() => {
     if (bookData) {
-      console.log("From GetAllBooks.jsx ", bookData.data);
+      // console.log("From GetAllBooks.jsx ", bookData.data);
     }
   }, [bookData]);
 
   return (
     <div>
-      <h1 style={{ textAlign: "center", marginTop: "100px" }}>All Products</h1>
+      <Banner />
+      <h1 style={{ textAlign: "center", marginTop: "100px" }}>All Books</h1>
       {/* Use the Button component for the sorting button with a smaller width */}
       <Button
-        text="Sort by Price"
-        style={{ backgroundColor: "blue", color: "white", width: "100px" }}
+        text="Sort By Price"
+        style={{
+          backgroundColor: "green",
+          color: "white",
+          width: "100px",
+          display: "flex",
+          textAlign: "center",
+          justifyContent: "left",
+          marginLeft: "150px",
+        }}
         onClick={sortBooksByPrice}
       />
       <div
@@ -59,7 +89,13 @@ const GetAllBooks = () => {
                 }}
               >
                 <img
-                  src={book.image}
+                  src={
+                    book.image
+                      ? `http://127.0.0.1:8000/file/get/${
+                          book.image.split("/")[1]
+                        }`
+                      : myImage
+                  }
                   alt={book.title}
                   style={{ maxWidth: "100%", height: "auto" }}
                 />
@@ -87,8 +123,16 @@ const GetAllBooks = () => {
                   width: "300px",
                 }}
               >
+                {/* {book.image && console.log(book.image.split("/")[1])} */}
+
                 <img
-                  src={book.image}
+                  src={
+                    book.image
+                      ? `http://127.0.0.1:8000/file/get/${
+                          book.image.split("/")[1]
+                        }`
+                      : myImage
+                  }
                   alt={book.title}
                   style={{ maxWidth: "100%", height: "auto" }}
                 />
@@ -98,14 +142,17 @@ const GetAllBooks = () => {
                 <Link to="add-to-cart">
                   <Button
                     text="Add to Cart"
-                    style={{ backgroundColor: "green", color: "white" }}
+                    style={{
+                      backgroundColor: "green",
+                      color: "white",
+                    }}
                     onClick={() => handleAddToCart(book)}
                   />
                 </Link>
               </div>
             ))}
       </div>
-      <CartTotal />
+      {/* <CartTotal /> */}
     </div>
   );
 };

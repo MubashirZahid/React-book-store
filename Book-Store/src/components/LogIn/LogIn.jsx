@@ -4,6 +4,9 @@ import { loginUser } from "../../utils/userSlice";
 import { useForm, Controller } from "react-hook-form";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const styles = {
   container: {
@@ -57,28 +60,44 @@ const LoginForm = () => {
 
         // set JWT token to local storage
         localStorage.setItem("token", token);
-
+        const myToken = localStorage.getItem("token");
+        const userInfo = decodeToken(myToken);
+        console.log(userInfo);
         // Dispatch the loginUser action with the user data.
         dispatch(
           loginUser({
+            id: userInfo.id,
+            name: userInfo.name,
+            role: userInfo.role,
             email: data.email,
             password: data.password /* other user data */,
           })
         );
 
+        if (userInfo.role == 1) {
+          navigate("/admin");
+        }
         // Redirect the user to the home page
-        navigate("/");
+        else {
+          navigate("/");
+        }
+        toast.success("Login successful", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert("Invalid credential");
+        console.log(err);
+      });
   };
 
   useEffect(() => {
-    dispatch(
-      loginUser({
-        email: userData.email,
-        password: userData.password /* other user data */,
-      })
-    );
+    // dispatch(
+    //   loginUser({
+    //     email: userData.email,
+    //     password: userData.password /* other user data */,
+    //   })
+    // );
   }, [userData]);
 
   return (
@@ -119,6 +138,10 @@ const LoginForm = () => {
           Login
         </button>
       </form>
+
+      <a className="login_forgot" href="/forgot-password">
+        Forgot Password?
+      </a>
     </div>
   );
 };

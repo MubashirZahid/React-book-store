@@ -14,6 +14,7 @@ const CartTotal = () => {
     <div>
       <h2>Cart Total</h2>
       <p>Total Price: ${getTotalPrice()}</p>
+      <button>Order</button>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import "./SignUp.css";
 import axiosInstance from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const {
@@ -10,6 +11,7 @@ const SignUp = () => {
     formState: { errors },
     getValues,
   } = useForm({ mode: "onChange" });
+  const navigate = useNavigate();
 
   const onSubmit = async () => {
     try {
@@ -24,6 +26,7 @@ const SignUp = () => {
 
       // Make a POST request to your backend API
       await axiosInstance.post("/auth/api/signUp", userData);
+      navigate("/login");
 
       console.log("User data submitted successfully");
     } catch (error) {
